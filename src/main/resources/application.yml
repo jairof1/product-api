@@ -1,0 +1,94 @@
+spring:
+  application:
+    name: b2c-app-product-api
+  mvc:
+    servlet:
+      path: /b2capp/product
+  jpa:
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.MySQLDialect"
+  datasource:
+    middle:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${DATASOURCE_URL}
+      username: ${DATASOURCE_USERNAME}
+      password: ${DATASOURCE_PASSWORD}
+    erp:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: ${DATASOURCE_URL_ERP}
+      username: ${DATASOURCE_USERNAME_ERP}
+      password: ${DATASOURCE_PASSWORD_ERP}
+    hikari:
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+      pool-name: ${POOL_NAME}
+      max-lifetime: ${MAX_LIFETIME}
+      minimum-idle: ${MINIMUM_IDLE}
+      idle-timeout: ${IDLE_TIMEOUT}
+  cloud:
+    aws:
+      region:
+        static: ${AWS_REGION}
+      credentials:
+        instance-profile: true
+        profile:
+          name: "default"
+
+server:
+  port: 8106
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+logstash:
+  url: ${LOGSTASH_URL}
+boot:
+  logstash:
+    destination: "${logstash.url}"
+    enabled: true
+    custom-fields: |-
+      {"appname":"b2c-app-product-api"}
+
+logging:
+  level:
+    '[com.dislicores]': DEBUG
+    '[com.amazonaws]': ERROR
+
+util-properties:
+  path-json-firebase: ${PATH_JSON_FIREBASE}
+  collection-firebase: cartb2c
+  notification:
+    machine-url: ${MACHINE_URL_CURRENT_ENVIRONMENT}
+    push-url: ${util-properties.notification.machine-url}/b2c/notification/api/v1/push
+    save-push-url: ${util-properties.notification.machine-url}/b2c/notification/api/v1/save-push
+    api-key: ${API_KEY_LOCAL_GATEWAY}
+  promotions:
+    machine-url: ${MACHINE_URL_CURRENT_ENVIRONMENT}
+    machine-url-promotion: http://b2c-app-promotion-api:8113
+    api-key: ${API_KEY_LOCAL_GATEWAY}
+  elastic-search:
+    url: ${ELASTICSEARCH_URL}
+    user: ${ELASTICSEARCH_USER}
+    password: ${ELASTICSEARCH_PASSWORD}
+    basic: ${ELASTICSEARCH_BASIC}
+    url-search-documents: ${ELASTICSEARCH_URL_SEARCH_DOCUMENTS_B2C}
+  vtex:
+    url: https://dislicoresqa.myvtex.com/api
+
+vtex:
+  vtex-api-key: ${VTEX_API_KEY}
+  vtex-api-token: ${VTEX_API_TOKEN}
+  principal-account-name: ${VTEX_PRINCIPAL_ACCOUNT_NAME}
+  environment: ${VTEX_ENVIRONMENT}
+  endpoint-get-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/search
+  endpoint-save-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/documents
+  endpoint-delete-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/documents/{id}
+  endpoint-get-product-search: https://${vtex.principal-account-name}.${vtex.environment}.com/api/catalog_system/pub/products/search

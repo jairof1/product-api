@@ -1,0 +1,71 @@
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    middle:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://dis-cluster-aurora-mysql8-dev.cluster-czwhusjob9vy.us-east-1.rds.amazonaws.com:3407/orionb2c_mssql?useSSL=true&enabledTLSProtocols=TLSv1.2
+      username: ricardoayala
+      password: B3yTiR79pCvX
+    erp:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://dis-cluster-aurora-mysql8-dev.cluster-ro-czwhusjob9vy.us-east-1.rds.amazonaws.com:3407/unoee_ceodev?useSSL=true&enabledTLSProtocols=TLSv1.2
+      username: ricardoayala
+      password: B3yTiR79pCvX
+    hikari:
+      maximum-pool-size: 2
+      pool-name: OrionPool
+      max-lifetime: 30000
+      minimum-idle: 1
+      idle-timeout: 0
+  cloud:
+    aws:
+      region:
+        static: "us-east-1"
+      credentials:
+        instance-profile: true
+        profile:
+          name: "dislicoresdev"
+
+logstash:
+  url: localhost:9600
+boot:
+  logstash:
+    destination: "${logstash.url}"
+    enabled: true
+    custom-fields: |-
+      {"appname":"b2c-app-product-api"}
+
+util-properties:
+  path-json-firebase: fcm/dislicores-firebase-creds-dev.json
+  collection-firebase: cartb2c
+  notification:
+    machine-url: https://h73euwasy3.execute-api.us-east-1.amazonaws.com/dev
+    push-url: ${util-properties.notification.machine-url}/b2c/notification/api/v1/push
+    save-push-url: ${util-properties.notification.machine-url}/b2c/notification/api/v1/save-push
+    api-key: CMapW6NzvM8INhLMpT1k4IrLC7kn1zz7FjJfUOJ8
+  promotions:
+    #machine-url: http://localhost:8113
+    machine-url: https://h73euwasy3.execute-api.us-east-1.amazonaws.com/dev
+    #machine-url-promotion: http://b2c-app-promotion-api:8113
+    machine-url-promotion: https://h73euwasy3.execute-api.us-east-1.amazonaws.com/dev
+    api-key: CMapW6NzvM8INhLMpT1k4IrLC7kn1zz7FjJfUOJ8
+  elastic-search:
+    url: search-orion-dev-k2rpjx4wzw7vy6n7qsomrlkcsa.us-east-1.es.amazonaws.com:443
+    user: DislicoresOrion
+    password: DislicoresOrion_2021*+
+    basic: Basic RGlzbGljb3Jlc09yaW9uOkRpc2xpY29yZXNPcmlvbl8yMDIxKis=
+    url-search-documents: https://search-orion-dev-k2rpjx4wzw7vy6n7qsomrlkcsa.us-east-1.es.amazonaws.com/b2c/_search
+  vtex:
+    url: https://dislicoresqa.myvtex.com/api
+
+
+vtex:
+  vtex-api-key: vtexappkey-dislicoresdev-STTXHQ
+  vtex-api-token: UCCBHHRGVSPXDRMSZZNJRDBIVWBSQWWNAGCCBYJIALWMQUIJKTGYIBSRAUFLGZPYVBWWPJQAPEIGGPRANRIXPXEZNLCHTYBBWYQOYLUBDFIESMKKCEXPRRJYXWJEGJHR
+  principal-account-name: dislicoresdev
+  environment: myvtex
+  endpoint-get-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/search
+  endpoint-save-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/documents
+  endpoint-delete-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/api/dataentities/wishlist/documents/{id}
+  endpoint-get-product-search: https://${vtex.principal-account-name}.${vtex.environment}.com/api/catalog_system/pub/products/search

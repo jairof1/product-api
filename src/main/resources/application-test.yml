@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: b2c-app-product-api
+  mvc:
+    servlet:
+      path: /b2capp/product
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  datasource:
+    middle:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:./build/h2db/db/ORIONB2B
+      username: sa
+      password: sa
+    erp:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:./build/h2db/db/UNOEE
+      username: sa
+      password: sa
+    hikari:
+      maximum-pool-size: 2
+      pool-name: OrionPool
+      max-lifetime: 30000
+      minimum-idle: 1
+      idle-timeout: 0
+  h2:
+    console:
+      enabled: true
+  cloud:
+    aws:
+      region:
+        static: test
+      credentials:
+        instance-profile: true
+        profile:
+          name: test
+
+logstash:
+  url: test
+boot:
+  logstash:
+    destination: "${logstash.url}"
+    enabled: true
+    custom-fields: |-
+      {"appname":"b2c-app-product-api"}
+
+server:
+  port: 8106
+
+util-properties:
+  path-json-firebase: fcm/dislicores-firebase-creds-dev.json
+  collection-firebase: test
+  notification:
+    machine-url: test
+    push-url: test
+    save-push-url: test
+    api-key: test
+  promotions:
+    machine-url: test
+    machine-url-promotion: test
+    api-key: test
+  elastic-search:
+    url: test
+    user: test
+    password: test
+    basic: test
+    url-search-documents: test
+  vtex:
+    url: https://${vtex.principal-account-name}.${vtex.environment}.com/api
+
+vtex:
+  vtex-api-key: test
+  vtex-api-token: test
+  principal-account-name: test
+  environment: test
+  endpoint-get-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/test/test/test/search
+  endpoint-save-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/test/test/test/documents
+  endpoint-delete-wishlist: https://${vtex.principal-account-name}.${vtex.environment}.com/test/test/test/documents/{id}
+  endpoint-get-product-search: https://${vtex.principal-account-name}.${vtex.environment}.com/api/catalog_system/pub/products/search
